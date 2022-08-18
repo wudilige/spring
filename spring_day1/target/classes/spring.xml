@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 每个bean标签在默认情况下会创建一个组件对象 -->
+    <!-- Class是类的全限定名（不能是接口、抽象类） -->
+    <!-- id是被创建对象的唯一标识，也被称为bean的name -->
+    <!-- 单例模式+SET注入 -->
+    <bean class="com.baizhi.lj.entity.Person" id="person">
+        <property name="age" value="23"/>
+        <property name="bir" value="2000/03/22"/>
+        <property name="name" value="lijin"/>
+    </bean>
+    <!-- 非单例模式 -->
+    <bean class="com.baizhi.lj.entity.Abc" id="abc" scope="prototype"/>
+    <!-- 单例模式 -->
+    <bean class="com.baizhi.lj.dao.UserDaoImpl" id="userDao"/>
+    <!-- SET注入 -->
+    <bean class="com.baizhi.lj.service.UserServiceImpl" id="userService">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+    <!-- 自动注入byType -->
+    <bean class="com.baizhi.lj.service.UserServiceImpl" id="userService2" autowire="byType"/>
+    <!-- 自动注入byName -->
+    <bean class="com.baizhi.lj.service.UserServiceImpl" id="userService3" autowire="byName"/>
+
+</beans>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- 通知 -->
+    <bean class="com.baizhi.lj.aop.UserBeforeAdvice" id="userBeforeAdvice"/>
+    <bean class="com.baizhi.lj.aop.UserAfterAdvice" id="userAfterAdvice"/>
+    <bean class="com.baizhi.lj.aop.ErrorAdvice" id="errorAdvice"/>
+    <!-- 目标 -->
+    <bean class="com.baizhi.lj.service.UserServiceImpl" id="userService"/>
+    <bean class="com.baizhi.lj.service.CityServiceImpl" id="cityService"/>
+    <!-- 组装切面 -->
+    <aop:config>
+        <!-- 配置添加方法切入点 -->
+        <aop:pointcut id="pc1" expression="execution(* com.baizhi.lj.service.UserServiceImpl.add*(..))"/>
+        <!-- 组装添加方法 -->
+        <aop:advisor advice-ref="userBeforeAdvice" pointcut-ref="pc1"/>
+    </aop:config>
+<!--    <aop:config>-->
+<!--        &lt;!&ndash; 所有方法 &ndash;&gt;-->
+<!--        <aop:pointcut id="pc2" expression="execution(* com.baizhi.lj.service.UserServiceImpl.*(..))"/>-->
+<!--        <aop:advisor advice-ref="userAfterAdvice" pointcut-ref="pc2"/>-->
+<!--    </aop:config>-->
+    <aop:config>
+        <!-- find的异常 -->
+        <aop:pointcut id="pc3" expression="execution(* com.baizhi.lj.service.*ServiceImpl.find*(..))"/>
+        <aop:advisor advice-ref="errorAdvice" pointcut-ref="pc3"/>
+    </aop:config>
+    <aop:config>
+        <aop:pointcut id="pc4" expression="within(com.baizhi.lj.service.*ServiceImpl)"/>
+        <aop:advisor advice-ref="userAfterAdvice" pointcut-ref="pc4"/>
+    </aop:config>
+    <aop:config>
+        <aop:pointcut id="pc5" expression="@annotation(com.baizhi.lj.annotation.ErrorAnnotation)"/>
+        <aop:advisor advice-ref="errorAdvice" pointcut-ref="pc5"/>
+    </aop:config>
+</beans>
